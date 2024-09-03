@@ -13,11 +13,6 @@ export default[
                 name:'niche',
                 required:true
             },
-            
         ]
     }
-    
-    
-
-
 ]

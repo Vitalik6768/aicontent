@@ -37,11 +37,12 @@ export function DropdownMenuSelection({ onComponentSelect }: DropdownMenuSelecti
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Appearance</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => handleSelect("text")}>
-          Text Input
+        <DropdownMenuItem onSelect={() => handleSelect("human")}>
+          Human Prompt
+
         </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => handleSelect("textarea")}>
-          Text Area
+        <DropdownMenuItem onSelect={() => handleSelect("bot")}>
+          Bot Prompt
         </DropdownMenuItem>
         <DropdownMenuItem onSelect={() => handleSelect("panel")}>
           Panel

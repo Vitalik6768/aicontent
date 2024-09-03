@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { TEMPLATE } from './TemplateListSection'
 import Link from 'next/link'
 
+
 function TemplateCard(item:TEMPLATE) {
   return (
     <Link href={`/dashboard/content/${item.slug}`} >

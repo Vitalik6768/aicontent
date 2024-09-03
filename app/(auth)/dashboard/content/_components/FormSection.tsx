@@ -18,6 +18,8 @@ interface PROPS {
 
 function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
 
+    console.log(selectedTemplate);
+
     const [formData, setFormData] = useState<any>();
 
     const handleInputChange = (event: any) => {
@@ -34,10 +36,6 @@ function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
         userFormInput(formData);
     }
 
-
-
-
-
     return (
         <div className='p-5 shadow-lg border rounded-md bg-white'>
             <h2 className='font-bold text-2xl mb2 text-primary'>
@@ -48,12 +46,14 @@ function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
                 {selectedTemplate?.form?.map((item, index) => (
                     <div className='my-2 flex flex-col gap-2 mb-7' key={index}>
                         <label>{item.label}</label>
-                        {item.field == 'input' ?
-                            <Input name={item.name} required={item?.required}
+                        {item.type == 'human' ?
+                            <Input name={item.type}
+                                required={item?.required}
+                                placeholder={`example prompt: ${item.value}`}
                                 onChange={handleInputChange}
                             />
-                            : item.field == 'textarea' ?
-                                <Textarea name={item.name} required={item?.required}
+                            : item.type == '' ?
+                                <Textarea name={item.type} required={item?.required}
                                     onChange={handleInputChange} />
                                 : null
 
@@ -63,7 +63,7 @@ function FormSection({ selectedTemplate, userFormInput, loading }: PROPS) {
                 ))}
 
                 <Button type='submit' className='w-full py-6' disabled={loading}>
-                    {loading &&<Loader2Icon className='animate-spin'/>}
+                    {loading && <Loader2Icon className='animate-spin' />}
                     Generate Content
                 </Button>
 

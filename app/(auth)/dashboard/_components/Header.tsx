@@ -1,5 +1,6 @@
-import { Search } from 'lucide-react'
-import React from 'react'
+import { Search } from 'lucide-react';
+import React from 'react';
+import UserIcon from './UserIcon';
 
 function Header() {
     return (
@@ -9,12 +10,12 @@ function Header() {
                 <input className='outline-none' type="text" placeholder='Search...' />
             </div>
 
-            <div>
-                <h2 className='bg-primary p1 rounded-full text-xs text-white px-2'>Join Membership</h2>
+            <div className='flex items-center gap-4'>
+                <UserIcon/>
+                
             </div>
-
         </div>
-    )
+    );
 }
 
-export default Header
+export default Header;
