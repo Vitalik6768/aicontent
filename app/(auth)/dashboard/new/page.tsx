@@ -15,8 +15,21 @@ type ComponentItem = {
     value: string;
 };
 
+const dummy: ComponentItem[] = [
+    {
+      type: "bot",
+      value: "write 5 article ideas about"
+    },
+    {
+      type: "human",
+      value: "cars"
+    }
+  ];
+
+
+
 function Page() {
-    const [selectedComponents, setSelectedComponents] = useState<ComponentItem[]>([]);
+    const [selectedComponents, setSelectedComponents] = useState<ComponentItem[]>(dummy);
     const [loading, setLoading] = useState(false);
     const [aiResult, setAiResult] = useState<string>("");
     const [aiPrompts, setAiPrompts] = useState<string>("");
@@ -39,6 +52,7 @@ function Page() {
             )
         );
     };
+    
 
     const handleDelete = (indexToRemove: number) => {
         setSelectedComponents(prevSelectedComponents =>
@@ -46,6 +60,8 @@ function Page() {
         );
     };
 
+
+    
     const generateAiContent = async () => {
         try {
             setLoading(true);
@@ -55,7 +71,7 @@ function Page() {
 
             const result = await chatSession.sendMessage(finalAiPrompt);
             const aiOutput = result.response.candidates[0].content.parts[0].text;
-            console.log(aiOutput);
+            console.log(finalAiPrompt);
 
             setAiResult(aiOutput);
             setAiPrompts(prevAiPrompts => `${prevAiPrompts}${finalAiPrompt}\nBot: ${aiOutput}\n`);
@@ -63,6 +79,7 @@ function Page() {
         } catch (error) {
             console.error("Error generating AI content:", error);
         } finally {
+            
             setLoading(false);
         }
     };

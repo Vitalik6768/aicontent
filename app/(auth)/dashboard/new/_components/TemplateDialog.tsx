@@ -14,6 +14,7 @@ type TemplateDialogProps = {
     aiPrompts: string;
 };
 
+
 export function TemplateDialog({ onSuccess, selectedComponents, aiPrompts }: TemplateDialogProps) {
     const [templateName, setTemplateName] = useState<string>("");
     const [templateDescription, setTemplateDescription] = useState<string>("");
@@ -41,11 +42,11 @@ export function TemplateDialog({ onSuccess, selectedComponents, aiPrompts }: Tem
         const templateData = {
             category: "ghjghj",
             icon: "icon",
-            slug: templateName,
+            slug: templateName.replace(/\s+/g, '-'),
             desc: templateDescription,
             name: templateName,
             createdBy: user?.primaryEmailAddress?.emailAddress,
-            createdAt: moment().format('DD/MM/YYYY'),
+            // createdAt: moment().format('DD/MM/YYYY'),
             components: selectedComponents,
             aiPrompt: botPrompt
         };
@@ -92,6 +93,8 @@ export function TemplateDialog({ onSuccess, selectedComponents, aiPrompts }: Tem
                         value={templateName}
                         onChange={(e) => setTemplateName(e.target.value)}
                     />
+                    
+                    
                     <Textarea
                         placeholder="Template Description"
                         value={templateDescription}

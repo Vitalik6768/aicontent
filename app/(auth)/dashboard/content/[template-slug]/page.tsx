@@ -19,6 +19,8 @@ interface PROPS {
     };
 }
 
+
+
 function CreateNewContent(props: PROPS) {
     const [selectedTemplate, setSelectedTemplate] = useState<TEMPLATE | undefined>(undefined);
     const [loading, setLoading] = useState(false);
@@ -49,19 +51,44 @@ function CreateNewContent(props: PROPS) {
 
     const generateAiContent = async (formData: any) => {
         setLoading(true);
+        
+        const selectedPromptcom = selectedTemplate?.form;
+        let FinalAiPrompt =""
 
-        const SelectedPrompt = selectedTemplate?.aiPrompt;
-        const FinalAiPrompt = JSON.stringify(formData) + ", " + SelectedPrompt;
-        const result = await chatSession.sendMessage(FinalAiPrompt);
+        if (selectedTemplate && selectedPromptcom) {
+            // Get the formData values in an array
+            const formDataValues = Object.values(formData);
+            let formDataIndex = 0;
+    
+            // Iterate over the form template
+            for (let i of selectedPromptcom) {
+                // Check if the type is 'bot'
+                if (i.type === "bot") {
+                    // Append the bot's value
+                    FinalAiPrompt += i.value + " ";
+    
+                    // Append the next value from formData
+                    if (formDataIndex < formDataValues.length) {
+                        FinalAiPrompt += formDataValues[formDataIndex] + " ";
+                        formDataIndex++; // Move to the next value in formData
+                    }
+                }
+            }
+        }
+    
+        console.log(FinalAiPrompt.trim());
+
+        const result = await chatSession.sendMessage(FinalAiPrompt.trim());
 
         setAioutput(result.response.candidates[0].content.parts[0].text);
-        await saveInDb(formData, selectedTemplate?.slug, result.response.candidates[0].content.parts[0].text);
+        await saveInDb(selectedTemplate?.slug, result.response.candidates[0].content.parts[0].text);
         setLoading(false);
-    };
+        console.log(result.response.candidates[0].content.parts[0].text);
+     };
 
-    const saveInDb = async (formData: any, slug: any, aiRespo: string) => {
+    const saveInDb = async ( slug: any, aiRespo: string) => {
         const result = await db.insert(AIOutput).values({
-            formData: formData,
+            // formData: formData,
             templateSlug: slug,
             aiResponse: aiRespo,
             createdBy: user?.primaryEmailAddress?.emailAddress,
@@ -82,7 +109,7 @@ function CreateNewContent(props: PROPS) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 p-5 py-5">
                 
                 
-                <FormSection selectedTemplate={selectedTemplate} userFormInput={(v: any) => generateAiContent(v)} loading={loading} />
+                <FormSection selectedTemplate={selectedTemplate} templateId={selectedTemplate?.id} userFormInput={(v: any) => generateAiContent(v)} loading={loading} />
                 <div className='col-span-2'>
                     <OutputSection aiOutput={aiOutput} />
                 </div>
