@@ -1,6 +1,6 @@
 # AI Template Management System
 
-An AI-powered template management system designed to help users create and reuse customizable prompts with maximum efficiency. This system allows users to create, share, and manage templates across users
+An AI-powered template management system designed to help users create and reuse customizable prompts with ease. This system allows users to create, share, and manage templates across users
 
 ## Features
 - **Customizable Prompts**: Easily generate, edit, and reuse AI-powered prompts tailored to specific needs.
@@ -8,7 +8,7 @@ An AI-powered template management system designed to help users create and reuse
 
 
 ## Tech Stack
-- **Frontend**: Next.js
+- **Fullstack**: Next.js
 - **Database ORM**: Drizzle ORM
 - **User Management**: Clerk
 - **Styling**: Tailwind CSS
