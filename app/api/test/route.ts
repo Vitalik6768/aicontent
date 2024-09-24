@@ -1,10 +1,12 @@
 import { NextResponse, NextRequest } from "next/server";
 import { db } from '@/utils/db';
-import { blogTools } from '@/utils/schema';
+import { blogTools, userFav} from '@/utils/schema';
 import { eq } from 'drizzle-orm';
+import { getAuth } from '@clerk/nextjs/server';
 
 
 export const dynamic = 'force-dynamic';
+
 
 
 function generateRandomString(length = 8) {
@@ -46,7 +48,7 @@ export const GET = async (req: NextRequest) => {
             records = await db.select().from(blogTools).where(eq(blogTools.createdBy, String(id)));
         } else {
             // Otherwise, fetch all records
-            records = await db.select().from(blogTools);
+            records = await db.select().from(blogTools).where(eq(blogTools.isPublic, true));
         }
 
         // Return the records as JSON
@@ -60,23 +62,55 @@ export const GET = async (req: NextRequest) => {
 
 
 
-  export const POST = async (req: NextRequest) => {
 
+
+
+export const POST = async (req: NextRequest) => {
     try {
         // Parse the JSON body from the request
         const data = await req.json();
+        
 
-            const updatedComponents = data.components.map((component: any) => ({
-        ...component, // Spread the existing fields
-        name: generateRandomString()  // Add the new field "name" with value "test"
-    }));
+        const { userId } = getAuth(req);
 
-        if(!data){
-             return new NextResponse(JSON.stringify(500));
+
+        // if(userId){
+        //     console.log(userId)
+        //     return new NextResponse(JSON.stringify({ error: "Invalid data" }), {
+        //         status: 400,
+        //         headers: { 'Content-Type': 'application/json' },
+        //     });
+        // }
+
+
+
+        // Ensure data exists
+        if (!data) {
+            return new NextResponse(JSON.stringify({ error: "User not authenticated" }), {
+                status: 400,
+                headers: { 'Content-Type': 'application/json' },
+            });
         }
 
-        // Save in the database
-        const result = await db.insert(blogTools).values({
+        // Get the authenticated user's information
+     
+
+        // if (!userId) {
+        //     return new NextResponse(JSON.stringify({ error: "User not authenticated" }), {
+        //         status: 401,
+        //         headers: { 'Content-Type': 'application/json' },
+        //     });
+        // }
+
+        // Update components and add random name
+        const updatedComponents = data.components.map((component: any) => ({
+            ...component,
+            name: generateRandomString()  // Add a random name to each component
+        }));
+
+        // Insert blog tool data into blogTools table
+       
+        const insertedBlogTool = await db.insert(blogTools).values({
             name: data.name,
             desc: data.desc,
             category: data.category,
@@ -85,11 +119,32 @@ export const GET = async (req: NextRequest) => {
             slug: data.slug,
             form: JSON.stringify(updatedComponents), // Assuming form is an array or object
             createdAt: new Date(), // Automatically set the current date and time
-            createdBy: data.createdBy,
+            createdBy: 'vitaligreg1988@gmail.com',
+            isPublic:true,
+            authorId:"userId"// Use the authenticated user's ID
+        }).returning();
+    
 
-        });
+        // Get the blogToolId from the insertedBlogTool (ensure the insertion returns the id)
+        const blogToolId = insertedBlogTool[0]?.id;
 
-        return new NextResponse(JSON.stringify({ message: "Data received successfully", result }), {
+        if (!blogToolId) {
+            return new NextResponse(JSON.stringify({ error: "Failed to insert blog tool" }), {
+                status: 500,
+                headers: { 'Content-Type': 'application/json' },
+            });
+        }
+
+        // Insert into userFavorites table
+        // const insertedFavorite = await db.insert(userFav).values({
+        //     userId: 'vitalgreg1988@gmail.com', // Use the authenticated user's ID
+        //     blogToolId: blogToolId, // Use the newly inserted blog tool's ID
+        //     favoritedAt: new Date(), // Set current timestamp for when it was favorited
+        // });
+
+        // Return success response
+        return new NextResponse(JSON.stringify({ message: "Data received successfully", blogToolId}), {
+        // return new NextResponse(JSON.stringify({ message: "Data received successfully", blogToolId, insertedFavorite }), {
             status: 200,
             headers: { 'Content-Type': 'application/json' },
         });
@@ -99,7 +154,9 @@ export const GET = async (req: NextRequest) => {
             status: 500,
             headers: { 'Content-Type': 'application/json' },
         });
+    
     }
+    
 };
 
 

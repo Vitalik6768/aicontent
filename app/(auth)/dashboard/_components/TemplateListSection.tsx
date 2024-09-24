@@ -70,16 +70,18 @@ function TemplateListSection({ userSearchInput }: any) {
 
     setLoading(true);
     try {
-      const response = await fetch(`/api/test?id=${userId}`); // Pass userId to the API
+      const response = await fetch(`/api/mytemp?id=${userId}`); // Pass userId to the API
       if (!response.ok) {
         throw new Error('Failed to fetch your templates');
       }
       const data = await response.json();
+      console.log(data);
       setTemplateList(data);
     } catch (error: any) {
       setError(error.message);
     } finally {
       setLoading(false);
+      
     }
   };
 

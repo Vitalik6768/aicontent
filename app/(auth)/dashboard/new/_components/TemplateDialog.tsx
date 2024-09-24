@@ -51,6 +51,7 @@ export function TemplateDialog({ onSuccess, selectedComponents, aiPrompts }: Tem
             aiPrompt: botPrompt
         };
 
+        
         try {
             setLoading(true);
             const response = await fetch(`http://localhost:3000/api/test`, {
