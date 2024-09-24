@@ -1,4 +1,20 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AI Template Management System
+
+An AI-powered template management system designed to help users create and reuse customizable prompts with ease. This system allows users to create, share, and manage templates across users
+
+## Features
+- **Customizable Prompts**: Easily generate, edit, and reuse AI-powered prompts tailored to specific needs.
+- **Template Sharing**: Seamlessly share templates with other users for efficient collaboration.
+
+
+## Tech Stack
+- **Fullstack**: Next.js
+- **Database ORM**: Drizzle ORM
+- **User Management**: Clerk
+- **Styling**: Tailwind CSS
+- **Language**: TypeScript
+
+
 
 ## Getting Started
 
