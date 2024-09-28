@@ -57,7 +57,7 @@ function TemplateListSection({ userSearchInput }: any) {
     setLoading(true);
     console.log(process.env.API_ROUTE);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/template`);
+      const response = await fetch(`/api/template`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
