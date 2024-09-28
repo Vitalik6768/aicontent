@@ -14,7 +14,8 @@ export interface TEMPLATE {
   createdAt?: string,
   createdBy?: string,
   id: number,
-  authorId:string
+  authorId:string,
+  image:string,
   isowner:boolean
   
 }
@@ -51,9 +52,12 @@ function TemplateListSection({ userSearchInput }: any) {
   };
 
   const getAllTemplates = async () => {
+
+    
     setLoading(true);
+    console.log(process.env.API_ROUTE);
     try {
-      const response = await fetch('/api/test');
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/template`);
       if (!response.ok) {
         throw new Error('Failed to fetch data');
       }
@@ -67,15 +71,17 @@ function TemplateListSection({ userSearchInput }: any) {
   };
 
   const getMyTemplates = async (userId: string | undefined) => {
+    console.log('ok')
     if (!userId) {
       setError('User ID is required to fetch your templates');
       return;
     }
 
 
+    
     setLoading(true);
     try {
-      const response = await fetch(`/api/mytemp?id=${userId}`); // Pass userId to the API
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/mytemp`); // Pass userId to the API
       if (!response.ok) {
         throw new Error('Failed to fetch your templates');
       }
@@ -108,7 +114,7 @@ function TemplateListSection({ userSearchInput }: any) {
   return (
     <>
       <TempSelect onComponentSelect={onComponentSelectTemp} />
-      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 p-10'>
+      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-5 p-10'>
         {templateList.map((item: TEMPLATE, index: number) => (
           <div key={index}>
             <TemplateCard {...item} />

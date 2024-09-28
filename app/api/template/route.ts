@@ -4,6 +4,7 @@ import { blogTools, userFav } from "@/utils/schema";
 import { eq } from "drizzle-orm";
 import { getAuth } from "@clerk/nextjs/server";
 
+
 export const dynamic = "force-dynamic";
 
 function generateRandomString(length = 8) {
@@ -39,10 +40,11 @@ export const GET = async (req: NextRequest) => {
 };
 
 export const POST = async (req: NextRequest) => {
-  console.log("new");
+
   try {
     // Parse the JSON body from the request
     const data = await req.json();
+
     const { userId } = await getAuth(req);
 
     if (!userId) {
@@ -94,8 +96,9 @@ export const POST = async (req: NextRequest) => {
         slug: data.slug,
         form: JSON.stringify(updatedComponents), // Assuming form is an array or object
         createdAt: new Date(), // Automatically set the current date and time
-        createdBy: "vitaligreg1988@gmail.com",
+        createdBy: data.createdBy,
         isPublic: true,
+        image:data.userImage,
         authorId: userId, // Use the authenticated user's ID
       })
       .returning();
@@ -146,6 +149,7 @@ export const POST = async (req: NextRequest) => {
 
 export const DELETE = async (req: NextRequest) => {
   const { userId } = await getAuth(req);
+  
 
   if (!userId) {
     console.log(userId);
@@ -170,26 +174,6 @@ export const DELETE = async (req: NextRequest) => {
         headers: { "Content-Type": "application/json" },
       });
     }
-
-    // Verify if the user is authorized to delete this record
-
-    // const toolToDelete = await db
-    //   .select()
-    //   .from(blogTools)
-    //   .where(eq(blogTools.id, Number(id)));
-
-    // if (!toolToDelete.length || toolToDelete[0].createdBy !== userId) {
-    //   return new NextResponse(
-    //     JSON.stringify({ error: "Unauthorized or record not found" }),
-    //     {
-    //       status: 403,
-    //       headers: { "Content-Type": "application/json" },
-    //     }
-    //   );
-    // }
-
-    // Delete the record from the blogTools table
-
 
     await db.delete(userFav).where(eq(userFav.templateId, Number(id)));
 

@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import React from "react"
+import { Menu } from "lucide-react";
 
 
 interface DropdownMenuSelectionProps {
@@ -29,10 +30,10 @@ export function DropdownMenuSelectionOptions({ onComponentSelect, isowner }: Dro
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="outline">options</Button>
+      <Menu className="cursor-pointer" />
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56">
-        <DropdownMenuLabel>Appearance</DropdownMenuLabel>
+      <DropdownMenuContent className="w-56 cursor-pointer">
+        <DropdownMenuLabel>Options</DropdownMenuLabel>
         <DropdownMenuSeparator />
         {isowner && (
           <DropdownMenuItem onSelect={() => handleSelect("delete")}>
@@ -42,7 +43,7 @@ export function DropdownMenuSelectionOptions({ onComponentSelect, isowner }: Dro
         }
 
         {!isowner && (
-          <DropdownMenuItem onSelect={() => handleSelect("delete")}>
+          <DropdownMenuItem className="cursor-pointe" onSelect={() => handleSelect("delete")}>
             Remove
           </DropdownMenuItem>
         )
@@ -50,7 +51,7 @@ export function DropdownMenuSelectionOptions({ onComponentSelect, isowner }: Dro
 
 
         {!isowner && (
-          <DropdownMenuItem onSelect={() => handleSelect("add-to-favorite")}>
+          <DropdownMenuItem className="cursor-pointe" onSelect={() => handleSelect("add-to-favorite")}>
             Add To Favorite
           </DropdownMenuItem>
         )}

@@ -148,7 +148,7 @@ function Page() {
                 <div className="flex-grow">
                     {selectedComponents.map((item, index) => (
                         <div key={index} className="flex items-center gap-2">
-                            <strong>{item.type === 'human' ? 'User' : 'Bot'}:</strong>
+                            {/* <strong>{item.type === 'human' ? 'User' : 'Bot'}:</strong> */}
                             <div>
                                 {item.type === 'human' && <User />}
                                 {item.type === 'bot' && <Bot />}

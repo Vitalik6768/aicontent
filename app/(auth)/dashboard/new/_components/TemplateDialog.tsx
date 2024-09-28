@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { use, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
 import { Dialog, DialogTrigger, DialogContent, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
-import moment from 'moment';
 import { useUser } from '@clerk/nextjs';
 
 type TemplateDialogProps = {
@@ -46,15 +45,15 @@ export function TemplateDialog({ onSuccess, selectedComponents, aiPrompts }: Tem
             desc: templateDescription,
             name: templateName,
             createdBy: user?.primaryEmailAddress?.emailAddress,
-            // createdAt: moment().format('DD/MM/YYYY'),
             components: selectedComponents,
-            aiPrompt: botPrompt
+            aiPrompt: botPrompt,
+            userImage:user?.imageUrl
         };
 
         
         try {
             setLoading(true);
-            const response = await fetch(`http://localhost:3000/api/test`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/template`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

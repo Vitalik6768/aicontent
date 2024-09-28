@@ -56,7 +56,7 @@ function FormSection({ selectedTemplate, userFormInput, loading, templateId, iso
 
     const addToFavorite = async (id: number) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/favorite?id=${id}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/favorite?id=${id}`, {
                 method: 'GET',
             });
 
@@ -72,7 +72,7 @@ function FormSection({ selectedTemplate, userFormInput, loading, templateId, iso
 
     const deleteTemplate = async (id: number) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/test?id=${id}&owner=${isowner}`, {
+            const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/template?id=${id}&owner=${isowner}`, {
                 method: 'DELETE',
             });
 
@@ -92,7 +92,7 @@ function FormSection({ selectedTemplate, userFormInput, loading, templateId, iso
     };
 
     return (
-        <div className="p-5 shadow-lg border rounded-md bg-white">
+        <div className="p-5 shadow-lg border  bg-white">
             <div className="flex justify-between">
                 <h2 className="font-bold text-2xl mb-2 text-primary">{selectedTemplate?.name}</h2>
                 <DropdownMenuSelectionOptions onComponentSelect={handleComponentSelection} isowner={isowner} />

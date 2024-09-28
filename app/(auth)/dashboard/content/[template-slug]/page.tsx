@@ -12,11 +12,12 @@ import { AIOutput } from '@/utils/schema';
 import { db } from '@/utils/db';
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
-import { log } from 'console';
+
 
 interface PROPS {
     params: {
         'template-slug': string;
+        'id':number;
     };
 }
 
@@ -35,22 +36,22 @@ function CreateNewContent(props: PROPS) {
         const fetchTemplateData = async () => {
            
             try {
-                const response = await fetch('http://localhost:3000/api/test'); // Update with your actual API route
+                const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/single-template?slug=${props.params['template-slug']}`); // Update with your actual API route
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
-                const data: TEMPLATE[] = await response.json();
-                const template = data.find(item => item.slug === props.params['template-slug']);
-                //Looking If Owner
-                if(template?.authorId === user?.id){
-                    setOwner(true)
-                    
 
-                // }else{
-                //     setOwner(false)
+                // console.log(data);
+                const data: TEMPLATE = await response.json();
+                // const template = data.find(item => item.slug === props.params['template-slug']);
+                console.log(`this is data ${data}`)
+                console.log(data)
+                //Looking If Owner
+                if(data?.authorId === user?.id){
+                    setOwner(true)
                  }
           
-                setSelectedTemplate(template);
+                setSelectedTemplate(data);
                 
 
 
@@ -117,13 +118,10 @@ function CreateNewContent(props: PROPS) {
     return (
         <div>
             <div className='ml-5 mt-5'>
-                <Link href={'/dashboard'}>
-                    <Button><ArrowLeft /></Button>
-                </Link>
+
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 p-5 py-5">
-                
                 
                 <FormSection selectedTemplate={selectedTemplate} isowner={owner} templateId={selectedTemplate?.id} userFormInput={(v: any) => generateAiContent(v)} loading={loading} />
                 <div className='col-span-2'>

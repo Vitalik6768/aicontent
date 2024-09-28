@@ -31,6 +31,7 @@ export const blogTools = pgTable('blog_tools', {
     slug: varchar('slug', { length: 255 }).notNull(),
     form: json('form').notNull(),
     createdAt: timestamp('created_at').defaultNow(),
+    image:varchar('image').notNull(),
     createdBy: varchar('createdBy', { length: 255 }).notNull(), // Clerk's user ID for ownership
     isPublic: boolean('is_public').default(true).notNull(), // Visibility control
     authorId: varchar("authorId", { length: 255 }).references(() => UserTable.id).notNull() // Make sure this is varchar

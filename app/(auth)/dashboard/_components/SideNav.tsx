@@ -19,21 +19,21 @@ function SideNav() {
             icon: CopyPlus,
             path: '/dashboard/new'
         },
-        {
-            name: 'history',
-            icon: FileClock,
-            path: '/dashboard/history'
-        },
-        {
-            name: 'Billing',
-            icon: WalletCards,
-            path: '/dashboard/billing'
-        },
-        {
-            name: 'Settings',
-            icon: Settings,
-            path: '/dashboard/settings'
-        },
+        // {
+        //     name: 'history',
+        //     icon: FileClock,
+        //     path: '/dashboard/history'
+        // },
+        // {
+        //     name: 'Billing',
+        //     icon: WalletCards,
+        //     path: '/dashboard/billing'
+        // },
+        // {
+        //     name: 'Settings',
+        //     icon: Settings,
+        //     path: '/dashboard/settings'
+        // },
     ]
 
     const path = usePathname();
