@@ -24,21 +24,24 @@ export const GET = async (req: NextRequest) => {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
 
-    let records;
-
-    records = await db
+    let records = await db
       .select()
       .from(blogTools)
       .where(eq(blogTools.isPublic, true));
 
-    // Return the records as JSON
-    return NextResponse.json(records, { status: 200 });
+    // Create response with CORS headers
+    const response = NextResponse.json(records, { status: 200 });
+    response.headers.set("Access-Control-Allow-Origin", "https://aicontent-pi.vercel.app");
+    response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+    return response;
+    
   } catch (error) {
     console.error("Error fetching records:", error);
     return new NextResponse("Failed to fetch records", { status: 500 });
   }
 };
-
 export const POST = async (req: NextRequest) => {
 
   try {
