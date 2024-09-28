@@ -8,7 +8,7 @@ const nextConfig = {
         headers: [
           {
             key: "Access-Control-Allow-Origin",
-            value: "https://aicontent-pi.vercel.app/", // Replace with your frontend URL
+            value: "*", // Replace with your frontend URL
           },
           {
             key: "Access-Control-Allow-Methods",
