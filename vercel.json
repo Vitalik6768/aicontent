@@ -1,0 +1,20 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "main.ts",
+        "use": "@vercel/next"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/api/(.*)",
+        "dest":"main.ts",
+        "headers": {
+          "Access-Control-Allow-Origin": "https://aicontent-bhakajace-vitalis-projects-e085ee35.vercel.app",
+          "Access-Control-Allow-Methods": "GET, POST, PUT, DELETE, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type, Authorization"
+        }
+      }
+    ]
+  }
