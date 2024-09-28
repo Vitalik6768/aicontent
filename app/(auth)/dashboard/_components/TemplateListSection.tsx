@@ -13,7 +13,10 @@ export interface TEMPLATE {
   form?: FORM[],
   createdAt?: string,
   createdBy?: string,
-  id: number
+  id: number,
+  authorId:string
+  isowner:boolean
+  
 }
 
 export interface FORM {
@@ -30,6 +33,7 @@ function TemplateListSection({ userSearchInput }: any) {
   const [templateList, setTemplateList] = useState<TEMPLATE[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [owner, setowner] = useState("all");
 
   const onComponentSelectTemp = (componentName: string) => {
     switch (componentName) {
@@ -68,6 +72,7 @@ function TemplateListSection({ userSearchInput }: any) {
       return;
     }
 
+
     setLoading(true);
     try {
       const response = await fetch(`/api/mytemp?id=${userId}`); // Pass userId to the API
@@ -75,8 +80,9 @@ function TemplateListSection({ userSearchInput }: any) {
         throw new Error('Failed to fetch your templates');
       }
       const data = await response.json();
-      console.log(data);
-      setTemplateList(data);
+      console.log(data.templates)
+      
+      setTemplateList(data.templates);
     } catch (error: any) {
       setError(error.message);
     } finally {
@@ -96,6 +102,8 @@ function TemplateListSection({ userSearchInput }: any) {
   if (error) {
     return <div>Error: {error}</div>;
   }
+
+
 
   return (
     <>

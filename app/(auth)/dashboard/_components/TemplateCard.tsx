@@ -4,7 +4,9 @@ import { TEMPLATE } from './TemplateListSection'
 import Link from 'next/link'
 
 
-function TemplateCard(item:TEMPLATE) {
+
+
+function TemplateCard(item:TEMPLATE, templateOwner:any) {
   return (
     <Link href={`/dashboard/content/${item.slug}`} >
     <div className='p-5 shadow-md rounded-md border bg-white flex flex-col gap-3 hover:scale-105 transition-all'>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { TEMPLATE } from '../../_components/TemplateListSection';
 import { Input } from '@/components/ui/input';
 import { Textarea } from '@/components/ui/textarea';
@@ -22,18 +22,24 @@ function generateRandomString(length = 8) {
 
 interface PROPS {
     selectedTemplate?: TEMPLATE;
-    userFormInput: any;
+    userFormInput: (data: Record<string, any>) => void;
     loading: boolean;
     templateId: any;
+    isowner:boolean;
+   
 }
 
-function FormSection({ selectedTemplate, userFormInput, loading, templateId }: PROPS) {
-    const [formData, setFormData] = useState<Record<string, any>>({}); // Initialize as an empty object
+function FormSection({ selectedTemplate, userFormInput, loading, templateId, isowner}: PROPS) {
+    const [formData, setFormData] = useState<Record<string, any>>({});
+    // const [owner, setOwner] = useState<boolean>(false); // Initialize as an empty string
     const router = useRouter();
 
-    const handleInputChange = (event: any) => {
+    // Update owner state using useEffect
+
+
+    const handleInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value});
+        setFormData({ ...formData, [name]: value });
         console.log(name);
     };
 
@@ -42,18 +48,31 @@ function FormSection({ selectedTemplate, userFormInput, loading, templateId }: P
             case 'delete':
                 deleteTemplate(templateId);
                 break;
-            case 'edit':
-                console.log('edit');
+            case 'add-to-favorite':
+                addToFavorite(templateId);
                 break;
-            case 'share':
-                console.log('share');
-                break;
+        }
+    };
+
+    const addToFavorite = async (id: number) => {
+        try {
+            const response = await fetch(`http://localhost:3000/api/favorite?id=${id}`, {
+                method: 'GET',
+            });
+
+            if (response.ok) {
+                router.push('/dashboard'); // Redirect to dashboard
+            } else {
+                console.error('Failed to add to favorites');
+            }
+        } catch (error) {
+            console.error('Error:', error);
         }
     };
 
     const deleteTemplate = async (id: number) => {
         try {
-            const response = await fetch(`http://localhost:3000/api/test?id=${id}`, {
+            const response = await fetch(`http://localhost:3000/api/test?id=${id}&owner=${isowner}`, {
                 method: 'DELETE',
             });
 
@@ -67,7 +86,7 @@ function FormSection({ selectedTemplate, userFormInput, loading, templateId }: P
         }
     };
 
-    const onSubmit = (e: any) => {
+    const onSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         userFormInput(formData); // Pass formData to parent component
     };
@@ -75,8 +94,8 @@ function FormSection({ selectedTemplate, userFormInput, loading, templateId }: P
     return (
         <div className="p-5 shadow-lg border rounded-md bg-white">
             <div className="flex justify-between">
-                <h2 className="font-bold text-2xl mb2 text-primary">{selectedTemplate?.name}</h2>
-                <DropdownMenuSelectionOptions onComponentSelect={handleComponentSelection} />
+                <h2 className="font-bold text-2xl mb-2 text-primary">{selectedTemplate?.name}</h2>
+                <DropdownMenuSelectionOptions onComponentSelect={handleComponentSelection} isowner={isowner} />
             </div>
             <p className="text-gray-500 text-sm">{selectedTemplate?.desc}</p>
 
@@ -86,14 +105,14 @@ function FormSection({ selectedTemplate, userFormInput, loading, templateId }: P
                         <label>{item.label}</label>
                         {item.type === 'human' ? (
                             <Input
-                                name={`${item.name}`} // Generate a random string for the name field
+                                name={item.name} // Use item.name for consistency
                                 required={item?.required}
                                 placeholder={`example prompt: ${item.value}`}
                                 onChange={handleInputChange}
                             />
                         ) : item.type === 'textarea' ? (
                             <Textarea
-                                name={generateRandomString()} // Generate a random string for the name field
+                                name={item.name} // Use item.name for consistency
                                 required={item?.required}
                                 onChange={handleInputChange}
                             />

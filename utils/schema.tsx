@@ -13,6 +13,14 @@ export const AIOutput = pgTable('aiOutput', {
 
 })
 
+export const UserTable = pgTable("user", {
+    id: varchar("id", { length: 255 }).primaryKey(), // Ensure this is varchar to match Clerk's IDs
+    name: varchar("name", { length: 255 }).notNull(),
+    email: varchar("email", { length: 255 }).notNull(),
+
+});
+
+// Define blogTools next
 export const blogTools = pgTable('blog_tools', {
     id: serial('id').primaryKey(),
     name: varchar('name', { length: 255 }).notNull(),
@@ -25,47 +33,25 @@ export const blogTools = pgTable('blog_tools', {
     createdAt: timestamp('created_at').defaultNow(),
     createdBy: varchar('createdBy', { length: 255 }).notNull(), // Clerk's user ID for ownership
     isPublic: boolean('is_public').default(true).notNull(), // Visibility control
-    authorId:varchar("authorId").references(() => UserTable.id).notNull()
+    authorId: varchar("authorId", { length: 255 }).references(() => UserTable.id).notNull() // Make sure this is varchar
 });
 
+// Define userFav last
+export const userFav = pgTable('userFav', {
+    id: serial('id').primaryKey(),
+    templateId: integer("templateId").references(() => blogTools.id).notNull(), // Changed to integer to match blogTools.id type
+    userId: varchar("userId", { length: 255 }).references(() => UserTable.id).notNull(), // Ensure this is varchar
+    favoriteBy: varchar("favoriteBy").notNull()
+});
 
+// Defining relations
 
-export const userFav = pgTable('userFav',{
-    id:serial('id').primaryKey(),
-    templateId:serial("templateId").references(() => blogTools.id).notNull(),
-    userId:uuid("userId").references(() => UserTable.id).notNull()
-
-
-})
-
-//Testing
-
-
-export const UserRole = pgEnum("userRole", ["ADMIN", "BASIC"])
-
-export const UserTable = pgTable("user", {
-    id: uuid("id").primaryKey(),
-    name: varchar("name", { length: 255 }).notNull(),
-    email: varchar("email", { length: 255 }).notNull(),
-    role: UserRole("UserRole").default("BASIC").notNull()
-}, table => {
+export const UserTemplateTableRelation = relations(UserTable, ({ many }) => {
     return {
-        emailImdex: uniqueIndex("emailIndex").on(table.email)
-    }
-})
-
-
-//Testing--<
-
-
-//Relation
-
-export const UserTemplateTableRelation = relations(UserTable, ({ many}) =>{
-    return{
-        fav:many(userFav),
-        templates:many(blogTools)
-    }
-})
+        fav: many(userFav),
+        templates: many(blogTools),
+    };
+});
 
 export const UserFavRelations = relations(userFav, ({ one }) => {
     return {
@@ -87,9 +73,5 @@ export const BlogToolsRelations = relations(blogTools, ({ one, many }) => {
             fields: [blogTools.authorId],
             references: [UserTable.id],
         }),
-        // Relation to the AI outputs generated for this blog tool
     };
 });
-
-
-

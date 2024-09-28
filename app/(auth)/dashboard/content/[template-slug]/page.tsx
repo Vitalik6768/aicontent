@@ -12,6 +12,7 @@ import { AIOutput } from '@/utils/schema';
 import { db } from '@/utils/db';
 import { useUser } from '@clerk/nextjs';
 import moment from 'moment';
+import { log } from 'console';
 
 interface PROPS {
     params: {
@@ -25,11 +26,14 @@ function CreateNewContent(props: PROPS) {
     const [selectedTemplate, setSelectedTemplate] = useState<TEMPLATE | undefined>(undefined);
     const [loading, setLoading] = useState(false);
     const [aiOutput, setAioutput] = useState<string>('');
+    const [owner, setOwner] = useState<boolean>(false)
     const { user } = useUser();
+   
 
     // Fetch the template data based on the 'template-slug' prop from the API route
     useEffect(() => {
         const fetchTemplateData = async () => {
+           
             try {
                 const response = await fetch('http://localhost:3000/api/test'); // Update with your actual API route
                 if (!response.ok) {
@@ -37,7 +41,17 @@ function CreateNewContent(props: PROPS) {
                 }
                 const data: TEMPLATE[] = await response.json();
                 const template = data.find(item => item.slug === props.params['template-slug']);
+                //Looking If Owner
+                if(template?.authorId === user?.id){
+                    setOwner(true)
+                    
+
+                // }else{
+                //     setOwner(false)
+                 }
+          
                 setSelectedTemplate(template);
+                
 
 
             } catch (error) {
@@ -47,7 +61,9 @@ function CreateNewContent(props: PROPS) {
         };
 
         fetchTemplateData();
-    }, [props.params['template-slug']]);
+    }, [user]);
+
+    // [props.params['template-slug']
 
     const generateAiContent = async (formData: any) => {
         setLoading(true);
@@ -109,7 +125,7 @@ function CreateNewContent(props: PROPS) {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 p-5 py-5">
                 
                 
-                <FormSection selectedTemplate={selectedTemplate} templateId={selectedTemplate?.id} userFormInput={(v: any) => generateAiContent(v)} loading={loading} />
+                <FormSection selectedTemplate={selectedTemplate} isowner={owner} templateId={selectedTemplate?.id} userFormInput={(v: any) => generateAiContent(v)} loading={loading} />
                 <div className='col-span-2'>
                     <OutputSection aiOutput={aiOutput} />
                 </div>

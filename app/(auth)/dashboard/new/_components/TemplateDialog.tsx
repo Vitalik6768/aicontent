@@ -83,6 +83,7 @@ export function TemplateDialog({ onSuccess, selectedComponents, aiPrompts }: Tem
             <DialogTrigger asChild>
                 <Button type='button' className='w-full py-6 mt-6'>
                     Open Dialog
+                    
                 </Button>
             </DialogTrigger>
             <DialogContent>

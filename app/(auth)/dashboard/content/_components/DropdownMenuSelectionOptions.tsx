@@ -11,24 +11,19 @@ import {
 import React from "react"
 
 
-
 interface DropdownMenuSelectionProps {
-  onComponentSelect: (componentName: string) => void
+  onComponentSelect: (componentName: string) => void;
+  isowner: any;
 }
 
 
-
-export function DropdownMenuSelectionOptions({ onComponentSelect }: DropdownMenuSelectionProps) {
+export function DropdownMenuSelectionOptions({ onComponentSelect, isowner }: DropdownMenuSelectionProps) {
   const [selectedComponent, setSelectedComponent] = React.useState<string | null>(null)
+  console.log(isowner);
 
   const handleSelect = (componentName: string) => {
 
     onComponentSelect(componentName)
-    // setSelectedComponent(componentName)
-    //  console.log(`${componentName} selected`)
-
-
-    // Additional logic can be placed here if you need to do something with the selected component
   }
 
   return (
@@ -39,13 +34,27 @@ export function DropdownMenuSelectionOptions({ onComponentSelect }: DropdownMenu
       <DropdownMenuContent className="w-56">
         <DropdownMenuLabel>Appearance</DropdownMenuLabel>
         <DropdownMenuSeparator />
-        <DropdownMenuItem onSelect={() => handleSelect("delete")}>
-          Delete
+        {isowner && (
+          <DropdownMenuItem onSelect={() => handleSelect("delete")}>
+            Delete
+          </DropdownMenuItem>
+        )
+        }
 
-        </DropdownMenuItem>
-        <DropdownMenuItem onSelect={() => handleSelect("share")}>
-          Share
-        </DropdownMenuItem>
+        {!isowner && (
+          <DropdownMenuItem onSelect={() => handleSelect("delete")}>
+            Remove
+          </DropdownMenuItem>
+        )
+        }
+
+
+        {!isowner && (
+          <DropdownMenuItem onSelect={() => handleSelect("add-to-favorite")}>
+            Add To Favorite
+          </DropdownMenuItem>
+        )}
+
       </DropdownMenuContent>
     </DropdownMenu>
   )
