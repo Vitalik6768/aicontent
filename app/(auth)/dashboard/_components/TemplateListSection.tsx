@@ -79,6 +79,7 @@ function TemplateListSection({ userSearchInput }: any) {
 
 
     
+    
     setLoading(true);
     try {
       const response = await fetch(`/api/mytemp`); // Pass userId to the API
