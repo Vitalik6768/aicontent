@@ -56,7 +56,7 @@ function FormSection({ selectedTemplate, userFormInput, loading, templateId, iso
 
     const addToFavorite = async (id: number) => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/favorite?id=${id}`, {
+            const response = await fetch(`/api/favorite?id=${id}`, {
                 method: 'GET',
             });
 
@@ -72,7 +72,7 @@ function FormSection({ selectedTemplate, userFormInput, loading, templateId, iso
 
     const deleteTemplate = async (id: number) => {
         try {
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/template?id=${id}&owner=${isowner}`, {
+            const response = await fetch(`/api/template?id=${id}&owner=${isowner}`, {
                 method: 'DELETE',
             });
 

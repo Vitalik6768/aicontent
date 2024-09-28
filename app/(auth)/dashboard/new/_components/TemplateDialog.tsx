@@ -53,7 +53,7 @@ export function TemplateDialog({ onSuccess, selectedComponents, aiPrompts }: Tem
         
         try {
             setLoading(true);
-            const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/template`, {
+            const response = await fetch(`/api/template`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

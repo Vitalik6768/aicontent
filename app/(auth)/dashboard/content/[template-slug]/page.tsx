@@ -36,7 +36,7 @@ function CreateNewContent(props: PROPS) {
         const fetchTemplateData = async () => {
            
             try {
-                const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/single-template?slug=${props.params['template-slug']}`); // Update with your actual API route
+                const response = await fetch(`/api/single-template?slug=${props.params['template-slug']}`); // Update with your actual API route
                 if (!response.ok) {
                     throw new Error('Failed to fetch data');
                 }
