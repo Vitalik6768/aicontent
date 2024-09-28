@@ -81,7 +81,7 @@ function TemplateListSection({ userSearchInput }: any) {
     
     setLoading(true);
     try {
-      const response = await fetch(`${process.env.NEXT_PUBLIC_API_ROUTE}/api/mytemp`); // Pass userId to the API
+      const response = await fetch(`/api/mytemp`); // Pass userId to the API
       if (!response.ok) {
         throw new Error('Failed to fetch your templates');
       }
