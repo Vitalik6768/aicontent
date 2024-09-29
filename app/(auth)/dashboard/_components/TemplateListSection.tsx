@@ -36,6 +36,7 @@ function TemplateListSection({ userSearchInput }: any) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+
   const onComponentSelectTemp = (componentName: string) => {
     switch (componentName) {
       case 'all':
@@ -74,7 +75,7 @@ function TemplateListSection({ userSearchInput }: any) {
     try {
       const response = await fetch(`/api/mytemp?userId=${userId}`); // Passing userId as a query parameter
       if (!response.ok) {
-        throw new Error('Failed to fetch your templates');
+        throw new Error('No templates');
       }
       const data = await response.json();
       setTemplateList(data.templates);
@@ -104,7 +105,11 @@ function TemplateListSection({ userSearchInput }: any) {
   }
 
   if (error) {
-    return <div className="text-red-500 text-center">Error: {error}</div>;
+    return <>
+
+      <TempSelect onComponentSelect={onComponentSelectTemp} />
+      <div className="text-red-500 text-center">Error: {error}</div>;
+    </>
   }
 
   return (
