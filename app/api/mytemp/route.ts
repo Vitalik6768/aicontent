@@ -7,11 +7,9 @@ export const dynamic = 'force-dynamic';
 export const revalidate = 0;
 
 export const GET = async (req: NextRequest) => {
-    console.log('ok')
     try {
         // Get the authenticated user's information
         const { userId } = getAuth(req);
-        console.log('Authenticated user ID:', userId);
 
         if (!userId) {
             return new NextResponse(JSON.stringify({ error: "User not authenticated" }), {

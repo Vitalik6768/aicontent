@@ -20,7 +20,6 @@ interface DropdownMenuSelectionProps {
 
 export function DropdownMenuSelectionOptions({ onComponentSelect, isowner }: DropdownMenuSelectionProps) {
   const [selectedComponent, setSelectedComponent] = React.useState<string | null>(null)
-  console.log(isowner);
 
   const handleSelect = (componentName: string) => {
 

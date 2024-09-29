@@ -65,7 +65,6 @@ const dummy: ComponentItem[] = [
 
             const result = await chatSession.sendMessage(finalAiPrompt);
             const aiOutput = result.response.candidates[0].content.parts[0].text;
-            console.log(finalAiPrompt);
 
             setAiResult(aiOutput);
             setAiPrompts(prevAiPrompts => `${prevAiPrompts}${finalAiPrompt}\nBot: ${aiOutput}\n`);

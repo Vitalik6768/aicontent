@@ -2,39 +2,39 @@ import React, { useEffect, useState } from 'react';
 import TemplateCard from './TemplateCard';
 import { TempSelect } from './TempSelect';
 import { useUser } from '@clerk/nextjs'; // Import useUser from Clerk
+import { Skeleton } from "@/components/ui/skeleton";
+
 
 export interface TEMPLATE {
-  name: string,
-  desc: string,
-  icon: string,
-  category: string,
-  slug: string,
-  aiPrompt: string,
-  form?: FORM[],
-  createdAt?: string,
-  createdBy?: string,
-  id: number,
-  authorId:string,
-  image:string,
-  isowner:boolean
-  
+  name: string;
+  desc: string;
+  icon: string;
+  category: string;
+  slug: string;
+  aiPrompt: string;
+  form?: FORM[];
+  createdAt?: string;
+  createdBy?: string;
+  id: number;
+  authorId: string;
+  image: string;
+  isowner: boolean;
 }
 
 export interface FORM {
-  label: string,
-  field: string,
-  name: string,
-  required?: boolean,
-  type: string,
-  value: string
+  label: string;
+  field: string;
+  name: string;
+  required?: boolean;
+  type: string;
+  value: string;
 }
 
 function TemplateListSection({ userSearchInput }: any) {
-  const { user } = useUser(); // Get the current Clerk user
+  const { user, isLoaded } = useUser(); // Get the current Clerk user and the loading state
   const [templateList, setTemplateList] = useState<TEMPLATE[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [owner, setowner] = useState("all");
 
   const onComponentSelectTemp = (componentName: string) => {
     switch (componentName) {
@@ -44,18 +44,16 @@ function TemplateListSection({ userSearchInput }: any) {
       case 'my':
         if (user?.primaryEmailAddress?.emailAddress) {
           getMyTemplates(user.primaryEmailAddress.emailAddress); // Pass the user's email
-        } // Pass the Clerk user ID to getMyTemplates
+        }
         break;
       default:
-        console.log('Unknown component selected');
+        break;
     }
   };
 
   const getAllTemplates = async () => {
-
-    
     setLoading(true);
-    console.log(process.env.API_ROUTE);
+    setError(null); // Clear any previous error
     try {
       const response = await fetch(`/api/template`);
       if (!response.ok) {
@@ -70,56 +68,51 @@ function TemplateListSection({ userSearchInput }: any) {
     }
   };
 
-  const getMyTemplates = async (userId: string | undefined) => {
-    console.log('ok')
-    if (!userId) {
-      setError('User ID is required to fetch your templates');
-      return;
-    }
-
-
-    
-    
+  const getMyTemplates = async (userId: string) => {
     setLoading(true);
+    setError(null); // Clear any previous error
     try {
-      const response = await fetch(`/api/mytemp`); // Pass userId to the API changing
+      const response = await fetch(`/api/mytemp?userId=${userId}`); // Passing userId as a query parameter
       if (!response.ok) {
         throw new Error('Failed to fetch your templates');
       }
       const data = await response.json();
-      console.log(data.templates)
-      
       setTemplateList(data.templates);
     } catch (error: any) {
       setError(error.message);
     } finally {
       setLoading(false);
-      
     }
   };
 
   useEffect(() => {
-    getAllTemplates();
-  }, []);
+    if (isLoaded) {
+      if (user?.primaryEmailAddress?.emailAddress) {
+        getMyTemplates(user.primaryEmailAddress.emailAddress);
+      } else {
+        getAllTemplates(); // Fetch all templates if the user is not authenticated
+      }
+    }
+  }, [user, isLoaded]);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if (!isLoaded || loading) {
+    return <div className="flex flex-col space-y-3 mt-14 ml-6">
+      <Skeleton className="h-[115px] w-[300px] rounded-xl" />
+
+    </div>
+      ;
   }
 
   if (error) {
-    return <div>Error: {error}</div>;
+    return <div className="text-red-500 text-center">Error: {error}</div>;
   }
-
-
 
   return (
     <>
       <TempSelect onComponentSelect={onComponentSelectTemp} />
       <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-5 p-10'>
-        {templateList.map((item: TEMPLATE, index: number) => (
-          <div key={index}>
-            <TemplateCard {...item} />
-          </div>
+        {templateList.map((item: TEMPLATE) => (
+          <TemplateCard key={item.id} {...item} />
         ))}
       </div>
     </>

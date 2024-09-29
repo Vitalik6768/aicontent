@@ -61,7 +61,6 @@ export function TemplateDialog({ onSuccess, selectedComponents, aiPrompts }: Tem
                 body: JSON.stringify(templateData),
             });
             const result = await response.json();
-            console.log('Template saved successfully:', result);
 
             setIsSuccess(true);
             setTimeout(() => {

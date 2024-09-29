@@ -44,8 +44,7 @@ function CreateNewContent(props: PROPS) {
                 // console.log(data);
                 const data: TEMPLATE = await response.json();
                 // const template = data.find(item => item.slug === props.params['template-slug']);
-                console.log(`this is data ${data}`)
-                console.log(data)
+       
                 //Looking If Owner
                 if(data?.authorId === user?.id){
                     setOwner(true)
@@ -93,14 +92,12 @@ function CreateNewContent(props: PROPS) {
             }
         }
     
-        console.log(FinalAiPrompt.trim());
 
         const result = await chatSession.sendMessage(FinalAiPrompt.trim());
 
         setAioutput(result.response.candidates[0].content.parts[0].text);
         await saveInDb(selectedTemplate?.slug, result.response.candidates[0].content.parts[0].text);
         setLoading(false);
-        console.log(result.response.candidates[0].content.parts[0].text);
      };
 
     const saveInDb = async ( slug: any, aiRespo: string) => {
@@ -112,7 +109,6 @@ function CreateNewContent(props: PROPS) {
             createdAt: moment().format('DD/MM/YYYY'),
         });
 
-        console.log(result);
     };
 
     return (

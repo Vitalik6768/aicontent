@@ -9,7 +9,6 @@ function page() {
             where:(table, funcs) => funcs.eq(table.authorId,"f546d155-de3f-4ef4-9bb3-00e38144ecf2")
         })
 
-        console.log(result)
 
     }
 
@@ -24,7 +23,6 @@ function page() {
                 }
             });
     
-            console.log(result);
         } catch (error) {
             console.error("Error querying merge table:", error);
         }

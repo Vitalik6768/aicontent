@@ -19,7 +19,6 @@ function generateRandomString(length = 8) {
 }
 
 export const GET = async (req: NextRequest) => {
-  console.log("all result");
   try {
     const { searchParams } = new URL(req.url);
     const id = searchParams.get("id");
@@ -47,7 +46,6 @@ export const POST = async (req: NextRequest) => {
     const { userId } = await getAuth(req);
 
     if (!userId) {
-      console.log(userId);
       return new NextResponse(JSON.stringify({ error: "Invalid data" }), {
         status: 400,
         headers: { "Content-Type": "application/json" },
@@ -151,7 +149,6 @@ export const DELETE = async (req: NextRequest) => {
   
 
   if (!userId) {
-    console.log(userId);
     return new NextResponse(
       JSON.stringify({ error: "Invalid user authentication" }),
       {
