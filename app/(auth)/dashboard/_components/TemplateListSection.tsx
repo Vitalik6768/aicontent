@@ -108,7 +108,7 @@ function TemplateListSection({ userSearchInput }: any) {
     return <>
 
       <TempSelect onComponentSelect={onComponentSelectTemp} />
-      <div className="text-red-500 text-center">Error: {error}</div>;
+      <div className="text-red-500 text-center">Error: {error}</div>
     </>
   }
 

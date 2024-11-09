@@ -2,9 +2,10 @@
 
 import React, { useEffect } from 'react'
 import Image from 'next/image'
-import { FileClock, Home, Settings, WalletCards, CopyPlus } from 'lucide-react'
+import { FileClock, Home, Settings, WalletCards, CopyPlus, File, NotebookPen, MessageSquare } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { ChatBubbleIcon } from '@radix-ui/react-icons'
 
 function SideNav() {
 
@@ -18,6 +19,21 @@ function SideNav() {
             name: 'create',
             icon: CopyPlus,
             path: '/dashboard/new'
+        },
+        {
+            name: 'Files',
+            icon: File,
+            path: '/dashboard/file-observer'
+        },
+        {
+            name: 'Notes',
+            icon: NotebookPen,
+            path: '/dashboard/notes'
+        },
+        {
+            name: 'Chat',
+            icon: MessageSquare,
+            path: '/dashboard/chat'
         },
         // {
         //     name: 'history',
